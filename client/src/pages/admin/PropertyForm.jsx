@@ -3,8 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, X, Plus } from 'lucide-react'
 import api from '../../utils/api'
 
-const propertyTypes = ['villa', 'apartment', 'luxury house', 'chalet', 'mansion', 'estate', 'cabin', 'condo', 'house', 'hacienda', 'Studio Type'
-]
+const propertyTypes = ['villa', 'apartment', 'luxury house', 'chalet', 'mansion', 'estate', 'cabin', 'condo', 'house', 'hacienda', 'Studio Type']
 
 const amenityOptions = {
   internetAndOffice: ['Internet', 'Wireless', 'Dedicated Workspace', 'Laptop Friendly workspace'],
@@ -67,7 +66,8 @@ function PropertyForm() {
   const [activeTab, setActiveTab] = useState('basic')
 
   useEffect(() => {
-    if (!localStorage.getItem('adminToken')) { navigate('/admin'); return }
+    // ✅ FIXED: was 'adminToken', now correctly uses 'gtmg_token'
+    if (!localStorage.getItem('gtmg_token')) { navigate('/admin'); return }
     if (isEdit) loadProperty()
   }, [id])
 
@@ -451,7 +451,8 @@ function PropertyForm() {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {keepImages.map((img, i) => (
                     <div key={i} style={{ position: 'relative' }}>
-                      <img src={img.startsWith('/') ? `http://localhost:5000${img}` : img} alt=""
+                      {/* ✅ FIXED: was hardcoded localhost:5000, now uses env variable */}
+                      <img src={img.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${img}` : img} alt=""
                         style={{ width: '96px', height: '72px', objectFit: 'cover', borderRadius: '2px' }} />
                       <button onClick={() => setKeepImages(prev => prev.filter((_, idx) => idx !== i))}
                         style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#dc2626', border: 'none', borderRadius: '50%', width: '18px', height: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
