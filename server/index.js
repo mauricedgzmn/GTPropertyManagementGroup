@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import connectDB from './config/db.js'
 import authRoutes from './routes/auth.js'
 import propertyRoutes from './routes/properties.js'
+import bookingRoutes from './routes/bookings.js'
 import inquiryRoutes from './routes/inquiries.js'
 import teamRoutes from './routes/team.js'
 import investLeadRoutes from './routes/investLeads.js'
@@ -34,12 +35,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/properties', propertyRoutes)
+app.use('/api/bookings', bookingRoutes)
 app.use('/api/inquiries', inquiryRoutes)
 app.use('/api/team', teamRoutes)
 app.use('/api/invest-leads', investLeadRoutes)
 
 // One-time setup: force admin account to owner role
-// Visit: https://your-render-url.onrender.com/api/setup-owner
 app.get('/api/setup-owner', async (req, res) => {
   try {
     const result = await Admin.updateMany(
@@ -49,6 +50,30 @@ app.get('/api/setup-owner', async (req, res) => {
     res.json({ message: `Done. ${result.modifiedCount} account(s) updated to owner.` })
   } catch (err) {
     res.status(500).json({ message: 'Error', error: err.message })
+  }
+})
+
+// One-time setup: create admin account if it doesn't exist
+// Visit: https://gtpropertymanagementgroup.onrender.com/api/create-admin
+app.get('/api/create-admin', async (req, res) => {
+  try {
+    const existing = await Admin.findOne({ username: 'admin' })
+    if (existing) {
+      existing.role = 'owner'
+      existing.active = true
+      await existing.save()
+      return res.json({ message: 'Admin already exists, updated to owner.' })
+    }
+    await Admin.create({
+      username: 'admin',
+      password: 'gtpmg2026',
+      name: 'Admin',
+      role: 'owner',
+      active: true
+    })
+    res.json({ message: 'Admin created successfully!' })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
   }
 })
 
