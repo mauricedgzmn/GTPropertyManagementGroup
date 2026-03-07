@@ -70,7 +70,7 @@ function MobileHeader({ onMenuOpen, unreadCount, username, sectionLabel }) {
 }
 
 // ─── Mobile Drawer ────────────────────────────────────────────
-function MobileDrawer({ open, onClose, navItems, activeSection, setActiveSection, username, role, unreadCount, showNotifs, setShowNotifs, notifications, markAllRead, handleNotifClick, handleLogout }) {
+function MobileDrawer({ open, onClose, navItems, activeSection, setActiveSection, username, role, unreadCount, showNotifs, setShowNotifs, notifications, markAllRead, clearAllNotifs, handleNotifClick, handleLogout }) {
   const ROLE_CONFIG = {
     owner: { label: 'Owner', color: '#c9a96e', bg: '#fdf8f0' },
     staff: { label: 'Staff', color: '#16a34a', bg: '#f0fdf4' },
@@ -145,6 +145,14 @@ function MobileDrawer({ open, onClose, navItems, activeSection, setActiveSection
                   </div>
                 </div>
               ))}
+              {notifications.length > 0 && (
+                <div style={{ display: 'flex', gap: '8px', padding: '10px 14px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  {notifications.some(n => !n.read) && (
+                    <button onClick={markAllRead} style={{ flex: 1, background: 'none', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '4px', padding: '6px', cursor: 'pointer', fontSize: '10px', color: 'rgba(255,255,255,0.5)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Mark all read</button>
+                  )}
+                  <button onClick={() => { clearAllNotifs(); setShowNotifs(false) }} style={{ flex: 1, background: 'none', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '4px', padding: '6px', cursor: 'pointer', fontSize: '10px', color: 'rgba(220,38,38,0.7)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Clear all</button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -403,19 +411,55 @@ function BookingCalendarSection({ properties }) {
   const [inquiries, setInquiries] = useState([])
   const [hoveredDate, setHoveredDate] = useState(null)
   const [showPropList, setShowPropList] = useState(false)
+  const [savingDate, setSavingDate] = useState(false)
 
   useEffect(() => { if (!selectedProperty && properties.length > 0) setSelectedProperty(properties[0]) }, [properties])
+
+  // Load confirmed inquiries
   useEffect(() => {
     api.get('/inquiries').then(({ data }) => setInquiries(data.filter(i => i.status === 'confirmed'))).catch(() => {})
   }, [])
 
+  // Load blocked dates from backend whenever selected property changes
+  useEffect(() => {
+    if (!selectedProperty?._id) return
+    const propId = selectedProperty._id
+    // Only fetch if we haven't loaded this property's dates yet
+    if (blockedDates[propId] !== undefined) return
+    api.get(`/properties/${propId}/blocked-dates`)
+      .then(({ data }) => {
+        setBlockedDates(prev => ({ ...prev, [propId]: data.blockedDates || [] }))
+      })
+      .catch(() => {
+        setBlockedDates(prev => ({ ...prev, [propId]: [] }))
+      })
+  }, [selectedProperty])
+
   const propKey = selectedProperty?._id
   const propBlocked = blockedDates[propKey] || []
-  const toggleDate = (dateStr) => {
-    setBlockedDates(prev => {
-      const cur = prev[propKey] || []
-      return { ...prev, [propKey]: cur.includes(dateStr) ? cur.filter(d => d !== dateStr) : [...cur, dateStr] }
-    })
+
+  const saveBlockedDates = async (newDates) => {
+    if (!propKey) return
+    setSavingDate(true)
+    try {
+      await api.put(`/properties/${propKey}/blocked-dates`, { blockedDates: newDates })
+    } catch (err) {
+      console.error('Failed to save blocked dates', err)
+    } finally {
+      setSavingDate(false)
+    }
+  }
+
+  const toggleDate = async (dateStr) => {
+    const cur = propBlocked
+    const newDates = cur.includes(dateStr) ? cur.filter(d => d !== dateStr) : [...cur, dateStr]
+    setBlockedDates(prev => ({ ...prev, [propKey]: newDates }))
+    await saveBlockedDates(newDates)
+  }
+
+  const clearAllBlocked = async () => {
+    setBlockedDates(prev => ({ ...prev, [propKey]: [] }))
+    await saveBlockedDates([])
   }
 
   const year = currentMonth.getFullYear()
@@ -523,10 +567,10 @@ function BookingCalendarSection({ properties }) {
         {propBlocked.length > 0 && (
           <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #f0eeeb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '13px', color: '#666' }}>{propBlocked.length} date{propBlocked.length !== 1 ? 's' : ''} blocked</span>
-            <button onClick={() => setBlockedDates(p => ({ ...p, [propKey]: [] }))} style={{ fontSize: '12px', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontFamily: "'Jost', sans-serif" }}>Clear all</button>
+            <button onClick={clearAllBlocked} style={{ fontSize: '12px', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontFamily: "'Jost', sans-serif" }}>Clear all</button>
           </div>
         )}
-        <p style={{ fontSize: '11px', color: '#aaa', marginTop: '12px' }}>Tap any available date to block/unblock it.</p>
+        <p style={{ fontSize: '11px', color: savingDate ? '#c9a96e' : '#aaa', marginTop: '12px' }}>{savingDate ? 'Saving…' : 'Tap any available date to block/unblock it.'}</p>
       </div>
     </div>
   )
@@ -976,10 +1020,17 @@ function Dashboard() {
   const [duplicating, setDuplicating] = useState(null)
   const [activeSection, setActiveSection] = useState('properties')
   const [toast, setToast] = useState(null)
-  const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('gtmg_notifications') || '[]') } catch { return [] }
+  })
   const [showNotifs, setShowNotifs] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const notifRef = useRef(null)
+
+  // Persist notifications to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem('gtmg_notifications', JSON.stringify(notifications))
+  }, [notifications])
   const navigate = useNavigate()
   const username = localStorage.getItem('gtmg_user') || 'Admin'
   const role = localStorage.getItem('gtmg_role') || 'staff'
@@ -1023,6 +1074,7 @@ function Dashboard() {
         const freshLeads = unseenLeads.filter(l => !existingIds.has(l._id)).map(l => ({ ...l, read: false, type: 'invest' }))
         const combined = [...freshInquiries, ...freshLeads]
         if (combined.length === 0) return prev
+        // New items go to the top; existing items keep their current read state
         return [...combined, ...prev].slice(0, 20)
       })
     } catch { /* silent */ }
@@ -1033,9 +1085,22 @@ function Dashboard() {
   const markAllRead = () => {
     const inquiryNotifs = notifications.filter(n => n.type === 'inquiry')
     const leadNotifs = notifications.filter(n => n.type === 'invest')
-    if (inquiryNotifs.length > 0) localStorage.setItem('gtmg_last_seen_inquiry', inquiryNotifs[0].createdAt)
-    if (leadNotifs.length > 0) localStorage.setItem('gtmg_last_seen_lead', leadNotifs[0].createdAt)
+    if (inquiryNotifs.length > 0) {
+      const latest = inquiryNotifs.reduce((a, b) => new Date(a.createdAt) > new Date(b.createdAt) ? a : b)
+      localStorage.setItem('gtmg_last_seen_inquiry', latest.createdAt)
+    }
+    if (leadNotifs.length > 0) {
+      const latest = leadNotifs.reduce((a, b) => new Date(a.createdAt) > new Date(b.createdAt) ? a : b)
+      localStorage.setItem('gtmg_last_seen_lead', latest.createdAt)
+    }
     setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+  }
+
+  const clearAllNotifs = () => {
+    setNotifications([])
+    localStorage.removeItem('gtmg_notifications')
+    localStorage.removeItem('gtmg_last_seen_inquiry')
+    localStorage.removeItem('gtmg_last_seen_lead')
   }
 
   const handleNotifClick = (notif) => {
@@ -1165,6 +1230,7 @@ function Dashboard() {
         setShowNotifs={setShowNotifs}
         notifications={notifications}
         markAllRead={markAllRead}
+        clearAllNotifs={clearAllNotifs}
         handleNotifClick={handleNotifClick}
         handleLogout={handleLogout}
       />
@@ -1206,7 +1272,10 @@ function Dashboard() {
             <div style={{ position: 'absolute', bottom: '100%', left: '12px', right: '12px', background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', boxShadow: '0 -8px 32px rgba(0,0,0,0.4)', overflow: 'hidden', zIndex: 200, marginBottom: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <span style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c9a96e' }}>Notifications</span>
-                {notifications.length > 0 && <button onClick={markAllRead} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Mark all read</button>}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  {notifications.some(n => !n.read) && <button onClick={markAllRead} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Mark all read</button>}
+                  {notifications.length > 0 && <button onClick={clearAllNotifs} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '10px', color: 'rgba(220,38,38,0.6)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Clear</button>}
+                </div>
               </div>
               <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                 {notifications.length === 0 ? (
