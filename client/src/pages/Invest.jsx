@@ -93,7 +93,7 @@ export default function Invest() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '32px' }}>
               <div style={{ width: '40px', height: '1px', background: '#c9a96e' }} />
               <span style={{ fontSize: '10px', letterSpacing: '0.28em', textTransform: 'uppercase', color: '#c9a96e', fontWeight: 500 }}>
-                Short-Term Rental Management · South Florida
+                Short-Term Rental Management
               </span>
               <div style={{ width: '40px', height: '1px', background: '#c9a96e' }} />
             </div>
