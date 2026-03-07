@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom'
 import { MapPin, Phone, Mail, Facebook, Linkedin, X } from 'lucide-react'
 
 import airbnb from '../assets/airbnb.png'
-import bnbflow from '../assets/bnbflow.png'
 import booking from '../assets/booking.png'
 import pricelabs from '../assets/pricelabs.png'
 import tripadvisor from '../assets/tripadvisor.png'
 import turo from '../assets/turo.png'
 import vrbo from '../assets/vrbo.png'
+import cupontours from '../assets/cupontours.png'
+import bnbflow1 from '../assets/bnbflow1.png'
 
 const platforms = [
   { name: 'Airbnb', logo: airbnb },
@@ -16,17 +17,17 @@ const platforms = [
   { name: 'Booking.com', logo: booking },
   { name: 'Tripadvisor', logo: tripadvisor },
   { name: 'Turo', logo: turo },
-  { name: 'BnbFlow', logo: bnbflow },
   { name: 'PriceLabs', logo: pricelabs },
+  { name: 'CuponTours', logo: cupontours },
+  { name: 'BnbFlow', logo: bnbflow1 },
 ]
 
 const quickLinks = [
   { label: 'Home', to: '/' },
-  { label: 'About Us', to: '/about' },
+  { label: 'Our Story', to: '/about' },
   { label: 'Properties', to: '/properties' },
-  { label: 'Work with Us', to: '/about#work-with-us' },
-  { label: 'Invest with Us', to: '/invest' },
-  { label: 'Contact', to: '/contact' },
+  { label: 'Work With Us', to: '/invest' },
+  { label: 'Why STR', to: '/why-str' },
 ]
 
 const destinations = [
