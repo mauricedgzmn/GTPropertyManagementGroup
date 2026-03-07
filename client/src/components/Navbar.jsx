@@ -5,10 +5,10 @@ import { Menu, X } from 'lucide-react'
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
+  { label: 'Our Story', href: '/about' },
   { label: 'Properties', href: '/properties' },
-  { label: 'Invest', href: '/invest' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Work With Us', href: '/invest' },
+  { label: 'Why STR', href: '/why-str' },
 ]
 
 const LogoText = ({ size = 'md' }) => (
@@ -59,7 +59,6 @@ function Navbar() {
 
   const mobileMenu = (
     <>
-      {/* Backdrop */}
       <div
         onClick={() => setMenuOpen(false)}
         style={{
@@ -71,8 +70,6 @@ function Navbar() {
           transition: 'opacity 0.3s',
         }}
       />
-
-      {/* Slide-in Panel */}
       <div style={{
         position: 'fixed', top: 0, right: 0, bottom: 0,
         width: '280px',
@@ -85,8 +82,6 @@ function Navbar() {
         overflowY: 'auto',
         boxShadow: '-8px 0 40px rgba(0,0,0,0.12)',
       }}>
-
-        {/* Header */}
         <div style={{
           padding: '0 20px', height: '64px', flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -104,8 +99,6 @@ function Navbar() {
             <X size={18} color="#1a1a1a" />
           </button>
         </div>
-
-        {/* Nav Links */}
         <div style={{ flex: 1, padding: '8px 20px', display: 'flex', flexDirection: 'column' }}>
           {navItems.map((item) => {
             const isActive = item.href === '/' ? location.pathname === '/' : location.pathname.startsWith(item.href)
@@ -134,8 +127,6 @@ function Navbar() {
             )
           })}
         </div>
-
-        {/* Bottom */}
         <div style={{ padding: '16px 20px', borderTop: '1px solid #f0eeeb', flexShrink: 0, background: '#faf9f7' }}>
           <Link
             to="/#booking"
@@ -159,7 +150,6 @@ function Navbar() {
 
   return (
     <>
-      {/* Top Bar */}
       <div style={{
         background: '#111', color: 'rgba(255,255,255,0.7)',
         fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase',
@@ -177,7 +167,6 @@ function Navbar() {
         {!isMobile && <div style={{ color: '#e8d5b0' }}>Comfortable Stays. Hassle-Free Booking</div>}
       </div>
 
-      {/* Navbar */}
       <nav style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'rgba(255,255,255,0.97)',
@@ -192,12 +181,10 @@ function Navbar() {
           height: '80px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          {/* Logo */}
           <Link to="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
             <LogoText size={isMobile ? 'sm' : 'md'} />
           </Link>
 
-          {/* Desktop Nav Links */}
           {!isMobile && (
             <ul style={{ display: 'flex', gap: '40px', listStyle: 'none', margin: 0, padding: 0 }}>
               {navItems.map((item) => {
@@ -220,7 +207,6 @@ function Navbar() {
             </ul>
           )}
 
-          {/* Desktop Book Now */}
           {!isMobile && (
             <Link to="/#booking" style={{
               background: '#111', color: '#fff',
@@ -234,7 +220,6 @@ function Navbar() {
             >Book Now</Link>
           )}
 
-          {/* Hamburger */}
           {isMobile && (
             <button
               onClick={() => setMenuOpen(true)}
@@ -250,7 +235,6 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu rendered via Portal — completely outside nav stacking context */}
       {isMobile && createPortal(mobileMenu, document.body)}
     </>
   )
