@@ -9,7 +9,7 @@ import tripadvisor from '../assets/tripadvisor.png'
 import turo from '../assets/turo.png'
 import vrbo from '../assets/vrbo.png'
 import cupontours from '../assets/cupontours.png'
-import bnbflow1 from '../assets/bnbflow1.png'
+import bnbflow from '../assets/bnbflow.png'
 
 const platforms = [
   { name: 'Airbnb', logo: airbnb },
@@ -19,7 +19,7 @@ const platforms = [
   { name: 'Turo', logo: turo },
   { name: 'PriceLabs', logo: pricelabs },
   { name: 'CuponTours', logo: cupontours },
-  { name: 'BnbFlow', logo: bnbflow1 },
+  { name: 'BnbFlow', logo: bnbflow },
 ]
 
 const quickLinks = [
