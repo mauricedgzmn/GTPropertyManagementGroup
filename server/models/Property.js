@@ -36,6 +36,7 @@ const propertySchema = new mongoose.Schema({
       guestEmail: { type: String },
     }
   ],
+  blockedDates: { type: [String], default: [] },
 }, { timestamps: true })
 
 export default mongoose.model('Property', propertySchema)
