@@ -3,7 +3,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import AboutUs from './pages/AboutUs'
 import Invest from './pages/Invest'
-import Contact from './pages/Contact'
+import WhySTR from './pages/WhySTR'
 import Login from './pages/admin/Login'
 import Dashboard from './pages/admin/Dashboard'
 import PropertyForm from './pages/admin/PropertyForm'
@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/invest" element={<Invest />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/why-str" element={<WhySTR />} />
         <Route path="/admin" element={<Login />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/properties/new" element={<PropertyForm />} />
