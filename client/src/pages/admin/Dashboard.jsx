@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Plus, Edit2, Trash2, Eye, EyeOff, Star, LogOut, Home,
   RefreshCw, Copy, MessageSquare, Calendar, BarChart2,
-  Star as StarIcon, MapPin, TrendingUp, Users, Mail,
+  MapPin, TrendingUp, Users, Mail,
   Phone, Check, Ban, X, CheckCircle, AlertTriangle, Clock, Bell
 } from 'lucide-react'
 import api from '../../utils/api'
@@ -166,7 +166,6 @@ function InquiriesSection({ showToast, properties = [] }) {
               ) : null)}
             </div>
 
-            {/* Price breakdown */}
             {(() => {
               const prop = properties.find(p => p._id === selected.propertyId || p.name === selected.property)
               const price = prop?.price || 0
@@ -204,31 +203,22 @@ function InquiriesSection({ showToast, properties = [] }) {
               </div>
             )}
             <div style={{ fontSize: '11px', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>Update Status</div>
-
-            {/* Current status indicator */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', padding: '10px 14px', background: '#f8f7f5', borderRadius: '6px' }}>
               <span style={{ fontSize: '11px', color: '#888' }}>Current:</span>
               <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 10px', background: STATUS_CONFIG[selected.status]?.bg, color: STATUS_CONFIG[selected.status]?.color, border: `1px solid ${STATUS_CONFIG[selected.status]?.border}`, borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 {STATUS_CONFIG[selected.status]?.label}
               </span>
             </div>
-
-            {/* Action buttons — only show relevant next actions */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {selected.status !== 'in_progress' && selected.status !== 'confirmed' && selected.status !== 'declined' && (
                 <button onClick={() => updateStatus(selected._id, 'in_progress')}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '6px', transition: 'all 0.15s', fontWeight: 500 }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#d97706'; e.currentTarget.style.color = '#fff' }}
                   onMouseLeave={e => { e.currentTarget.style.background = '#fffbeb'; e.currentTarget.style.color = '#d97706' }}
-                >
-                  <Clock size={14} /> Mark In Progress
-                </button>
+                ><Clock size={14} /> Mark In Progress</button>
               )}
               {selected.status === 'in_progress' && (
-                <button onClick={() => updateStatus(selected._id, 'in_progress')}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#d97706', color: '#fff', border: '1px solid #d97706', cursor: 'default', fontFamily: "'Jost', sans-serif", borderRadius: '6px', fontWeight: 500, opacity: 0.7 }}
-                  disabled
-                >
+                <button disabled style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#d97706', color: '#fff', border: '1px solid #d97706', cursor: 'default', fontFamily: "'Jost', sans-serif", borderRadius: '6px', fontWeight: 500, opacity: 0.7 }}>
                   <Clock size={14} /> In Progress
                 </button>
               )}
@@ -237,9 +227,7 @@ function InquiriesSection({ showToast, properties = [] }) {
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '6px', transition: 'all 0.15s', fontWeight: 500 }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#fff' }}
                   onMouseLeave={e => { e.currentTarget.style.background = '#f0fdf4'; e.currentTarget.style.color = '#16a34a' }}
-                >
-                  <Check size={14} /> Confirm Booking
-                </button>
+                ><Check size={14} /> Confirm Booking</button>
               )}
               {selected.status === 'confirmed' && (
                 <button disabled style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#16a34a', color: '#fff', border: 'none', fontFamily: "'Jost', sans-serif", borderRadius: '6px', fontWeight: 500, cursor: 'default', opacity: 0.8 }}>
@@ -251,24 +239,18 @@ function InquiriesSection({ showToast, properties = [] }) {
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#fff', color: '#dc2626', border: '1px solid #fecaca', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '6px', transition: 'all 0.15s', fontWeight: 500 }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#fef2f2' }}
                   onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
-                >
-                  <Ban size={14} /> Decline
-                </button>
+                ><Ban size={14} /> Decline</button>
               ) : (
                 <button disabled style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', fontFamily: "'Jost', sans-serif", borderRadius: '6px', fontWeight: 500, cursor: 'default', opacity: 0.7 }}>
                   <Ban size={14} /> Declined
                 </button>
               )}
-
-              {/* Remove button — only for declined */}
               {selected.status === 'declined' && (
                 <button onClick={() => deleteInquiry(selected._id)}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '11px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', background: '#111', color: '#fff', border: '1px solid #111', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '6px', transition: 'all 0.15s', fontWeight: 500, marginTop: '4px' }}
                   onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.borderColor = '#dc2626' }}
                   onMouseLeave={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.borderColor = '#111' }}
-                >
-                  <Trash2 size={14} /> Remove Inquiry
-                </button>
+                ><Trash2 size={14} /> Remove Inquiry</button>
               )}
             </div>
           </div>
@@ -310,7 +292,6 @@ function BookingCalendarSection({ properties }) {
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const today = new Date(); today.setHours(0, 0, 0, 0)
 
-  // Dates from property's bookedDates field
   const propertyBookedDates = (() => {
     const dates = []
     ;(selectedProperty?.bookedDates || []).forEach(b => {
@@ -321,13 +302,12 @@ function BookingCalendarSection({ properties }) {
     return dates
   })()
 
-  // Confirmed inquiry dates for this property
   const confirmedInquiries = inquiries.filter(i =>
     i.propertyId === propKey || i.property === selectedProperty?.name
   )
 
   const confirmedDates = (() => {
-    const map = {} // dateStr -> inquiry guest name
+    const map = {}
     confirmedInquiries.forEach(inq => {
       if (!inq.checkIn || !inq.checkOut) return
       const s = new Date(inq.checkIn), e = new Date(inq.checkOut)
@@ -349,7 +329,6 @@ function BookingCalendarSection({ properties }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '24px', alignItems: 'start' }}>
-        {/* Property list */}
         <div style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '8px', overflow: 'hidden', maxHeight: '580px', overflowY: 'auto' }}>
           <div style={{ padding: '14px 18px', borderBottom: '1px solid #f0eeeb', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9a9590' }}>Properties</div>
           {properties.length === 0
@@ -372,10 +351,7 @@ function BookingCalendarSection({ properties }) {
           }
         </div>
 
-        {/* Calendar */}
         <div style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '8px', padding: '28px' }}>
-
-          {/* Confirmed inquiries summary */}
           {confirmedCount > 0 && (
             <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Check size={15} color="#16a34a" />
@@ -392,7 +368,6 @@ function BookingCalendarSection({ properties }) {
             </div>
           )}
 
-          {/* Legend */}
           <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', flexWrap: 'wrap' }}>
             {[['#dcfce7','Confirmed (inquiry)'],['#fee2e2','Booked (property)'],['#dbeafe','Blocked (manual)'],['transparent','Available']].map(([bg, l]) => (
               <div key={l} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#666' }}>
@@ -401,7 +376,6 @@ function BookingCalendarSection({ properties }) {
             ))}
           </div>
 
-          {/* Month nav */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <button onClick={() => setCurrentMonth(new Date(year, month - 1, 1))} style={{ background: 'none', border: '1px solid #e8e4de', width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>‹</button>
             <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', fontWeight: 500 }}>{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
@@ -422,11 +396,9 @@ function BookingCalendarSection({ properties }) {
               const isToday = new Date(year, month, i + 1).getTime() === today.getTime()
               const guestName = confirmedDates[dateStr]
               const isHovered = hoveredDate === dateStr
-
               const bg = isConfirmed ? '#dcfce7' : isBooked ? '#fee2e2' : isBlocked ? '#dbeafe' : 'transparent'
               const color = isConfirmed ? '#16a34a' : isBooked ? '#dc2626' : isBlocked ? '#2563eb' : '#1a1a1a'
               const isDisabled = isConfirmed || isBooked
-
               return (
                 <div key={i} style={{ position: 'relative' }}>
                   <div
@@ -434,10 +406,7 @@ function BookingCalendarSection({ properties }) {
                     onMouseEnter={() => setHoveredDate(dateStr)}
                     onMouseLeave={() => setHoveredDate(null)}
                     style={{ textAlign: 'center', padding: '10px 2px', fontSize: '13px', borderRadius: '6px', cursor: isDisabled ? 'default' : 'pointer', background: bg, color, fontWeight: isToday ? 700 : 400, border: isToday ? '2px solid #c9a96e' : '2px solid transparent', transition: 'all 0.15s' }}
-                    onMouseEnterCapture={e => { if (!isDisabled && !isBlocked) e.currentTarget.style.background = '#f5f3f0' }}
-                    onMouseLeaveCapture={e => { if (!isDisabled && !isBlocked) e.currentTarget.style.background = 'transparent' }}
                   >{i + 1}</div>
-                  {/* Tooltip for confirmed dates */}
                   {isConfirmed && isHovered && guestName && (
                     <div style={{ position: 'absolute', bottom: '110%', left: '50%', transform: 'translateX(-50%)', background: '#1a1a1a', color: '#fff', fontSize: '11px', padding: '5px 10px', borderRadius: '6px', whiteSpace: 'nowrap', zIndex: 100, pointerEvents: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                       {guestName}
@@ -592,8 +561,6 @@ function InvestLeadsSection({ showToast }) {
     } catch { showToast('Failed to remove lead', 'error') }
   }
 
-  const newCount = leads.filter(l => l.status === 'new').length
-
   return (
     <div>
       <div style={{ marginBottom: '28px' }}>
@@ -602,11 +569,10 @@ function InvestLeadsSection({ showToast }) {
         <p style={{ fontSize: '13px', color: '#888', margin: '6px 0 0' }}>Clients who submitted the investment inquiry form.</p>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '24px' }}>
         {[
-          { label: 'Total Leads',  value: leads.length,                                  color: '#1a1a1a' },
-          { label: 'New',          value: leads.filter(l => l.status === 'new').length,       color: '#c9a96e' },
+          { label: 'Total Leads',  value: leads.length, color: '#1a1a1a' },
+          { label: 'New',          value: leads.filter(l => l.status === 'new').length, color: '#c9a96e' },
           { label: 'Contacted',    value: leads.filter(l => l.status === 'contacted').length, color: '#2563eb' },
         ].map(s => (
           <div key={s.label} style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '8px', padding: '20px 24px' }}>
@@ -617,7 +583,6 @@ function InvestLeadsSection({ showToast }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: selected ? '1fr 380px' : '1fr', gap: '20px', alignItems: 'start' }}>
-        {/* List */}
         <div style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '8px', overflow: 'hidden' }}>
           {loading ? (
             <div style={{ padding: '48px', textAlign: 'center', fontSize: '13px', color: '#aaa' }}>Loading leads...</div>
@@ -657,7 +622,6 @@ function InvestLeadsSection({ showToast }) {
           })}
         </div>
 
-        {/* Detail Panel */}
         {selected && (
           <div style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '8px', padding: '24px', position: 'sticky', top: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
@@ -667,8 +631,6 @@ function InvestLeadsSection({ showToast }) {
               </div>
               <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', padding: '4px' }}><X size={16} /></button>
             </div>
-
-            {/* Info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px', padding: '16px', background: '#f8f7f5', borderRadius: '6px' }}>
               {[
                 { label: 'Email', value: selected.email },
@@ -681,14 +643,10 @@ function InvestLeadsSection({ showToast }) {
                 </div>
               ))}
             </div>
-
-            {/* Message */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '8px' }}>Message</div>
               <div style={{ background: '#f8f7f5', padding: '14px', borderRadius: '6px', fontSize: '13px', color: '#555', lineHeight: 1.75, fontStyle: 'italic' }}>"{selected.message}"</div>
             </div>
-
-            {/* Status Actions */}
             <div style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '10px' }}>Update Status</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
               {Object.entries(STATUS_LEAD).map(([key, sc]) => (
@@ -700,7 +658,6 @@ function InvestLeadsSection({ showToast }) {
                 </button>
               ))}
             </div>
-
             <button onClick={() => setDeleteConfirm(selected._id)}
               style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', color: '#dc2626', fontFamily: "'Jost', sans-serif", transition: 'all 0.15s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.color = '#fff' }}
@@ -711,7 +668,6 @@ function InvestLeadsSection({ showToast }) {
         )}
       </div>
 
-      {/* Delete Confirm */}
       {deleteConfirm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: '#fff', borderRadius: '12px', padding: '36px', width: '100%', maxWidth: '360px', textAlign: 'center' }}>
@@ -730,95 +686,6 @@ function InvestLeadsSection({ showToast }) {
     </div>
   )
 }
-
-// ─── Reviews Section ─────────────────────────────────────────
-const MOCK_REVIEWS = [
-  { _id: 'r1', guest: 'Maria Santos', property: 'Spacious Apt Perfect for Disney', rating: 5, comment: 'Absolutely wonderful stay! The apartment was spotless, well-equipped, and just minutes from Disney. Would 100% book again.', status: 'pending', date: '2026-03-04' },
-  { _id: 'r2', guest: 'James Rodriguez', property: 'King Suite Retreat', rating: 4, comment: 'Great location and very comfortable beds. The check-in process was smooth. Minor issue with the AC but was resolved quickly.', status: 'approved', date: '2026-03-03' },
-  { _id: 'r3', guest: 'Anna Lee', property: 'Refreshing Studio', rating: 5, comment: 'Perfect solo trip accommodation! Clean, cozy and everything I needed. The pool was a bonus.', status: 'approved', date: '2026-03-01' },
-  { _id: 'r4', guest: 'Tom Walker', property: 'Modern Disney-Area Getaway', rating: 2, comment: 'The place was not as described. The kitchen was missing several items and the WiFi barely worked during our stay.', status: 'pending', date: '2026-03-05' },
-]
-
-function ReviewsSection({ showToast }) {
-  const [reviews, setReviews] = useState(MOCK_REVIEWS)
-  const [filter, setFilter] = useState('all')
-
-  const updateReview = (id, status) => {
-    setReviews(prev => prev.map(r => r._id === id ? { ...r, status } : r))
-    showToast(status === 'approved' ? 'Review approved — now live on site' : 'Review rejected')
-  }
-
-  const filtered = filter === 'all' ? reviews : reviews.filter(r => r.status === filter)
-  const counts = { pending: reviews.filter(r => r.status === 'pending').length, approved: reviews.filter(r => r.status === 'approved').length }
-
-  const Stars = ({ n }) => (
-    <div style={{ display: 'flex', gap: '2px' }}>
-      {[1,2,3,4,5].map(i => <StarIcon key={i} size={14} color="#f5a623" fill={i <= n ? '#f5a623' : 'none'} />)}
-    </div>
-  )
-
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <p style={{ fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#c9a96e', margin: '0 0 4px' }}>Management</p>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '32px', fontWeight: 400, color: '#1a1a1a', margin: 0 }}>Guest Reviews</h2>
-        </div>
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-          {[['all','All'], ['pending','Pending'], ['approved','Approved'], ['rejected','Rejected']].map(([k, l]) => (
-            <button key={k} onClick={() => setFilter(k)} style={{ padding: '7px 14px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', background: filter === k ? '#111' : '#fff', color: filter === k ? '#fff' : '#666', border: '1px solid #e8e4de', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '4px' }}>{l}</button>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '28px' }}>
-        {[{ label: 'Total Reviews', value: reviews.length, color: '#1a1a1a' }, { label: 'Pending Approval', value: counts.pending, color: '#d97706' }, { label: 'Live on Site', value: counts.approved, color: '#16a34a' }].map(s => (
-          <div key={s.label} style={{ background: '#fff', border: '1px solid #f0eeeb', padding: '20px 24px', borderRadius: '8px' }}>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '36px', fontWeight: 400, color: s.color, lineHeight: 1 }}>{s.value}</div>
-            <div style={{ fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#9a9590', marginTop: '4px' }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {filtered.map(r => (
-          <div key={r._id} style={{ background: '#fff', border: `1px solid ${r.status === 'pending' ? '#fde68a' : '#f0eeeb'}`, borderRadius: '8px', padding: '24px', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
-              {r.status === 'pending'  && <span style={{ fontSize: '10px', padding: '3px 10px', background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a', borderRadius: '10px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pending</span>}
-              {r.status === 'approved' && <span style={{ fontSize: '10px', padding: '3px 10px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: '10px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Live</span>}
-              {r.status === 'rejected' && <span style={{ fontSize: '10px', padding: '3px 10px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '10px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Rejected</span>}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f0eeeb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 600, color: '#c9a96e', flexShrink: 0 }}>{r.guest[0]}</div>
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: 500, color: '#1a1a1a' }}>{r.guest}</div>
-                <div style={{ fontSize: '12px', color: '#888' }}>{r.property} · {r.date}</div>
-              </div>
-            </div>
-            <Stars n={r.rating} />
-            <p style={{ fontSize: '14px', color: '#555', lineHeight: 1.75, margin: '10px 0 0', fontStyle: 'italic' }}>"{r.comment}"</p>
-            {r.status === 'pending' && (
-              <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
-                <button onClick={() => updateReview(r._id, 'approved')} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 18px', background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', cursor: 'pointer', fontSize: '12px', borderRadius: '4px', fontFamily: "'Jost', sans-serif", transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#f0fdf4'; e.currentTarget.style.color = '#16a34a' }}
-                ><Check size={13} /> Approve & Publish</button>
-                <button onClick={() => updateReview(r._id, 'rejected')} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 18px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', cursor: 'pointer', fontSize: '12px', borderRadius: '4px', fontFamily: "'Jost', sans-serif", transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.color = '#dc2626' }}
-                ><Ban size={13} /> Reject</button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-
-
-
 
 // ─── Team Members Section ────────────────────────────────────
 const ROLE_CONFIG = {
@@ -1061,7 +928,6 @@ function Dashboard() {
   const [toast, setToast] = useState(null)
   const [notifications, setNotifications] = useState([])
   const [showNotifs, setShowNotifs] = useState(false)
-  const [lastSeenId, setLastSeenId] = useState(() => localStorage.getItem('gtmg_last_seen_inquiry') || null)
   const notifRef = useRef(null)
   const navigate = useNavigate()
   const username = localStorage.getItem('gtmg_user') || 'Admin'
@@ -1071,7 +937,6 @@ function Dashboard() {
 
   const showToast = (msg, type = 'success') => setToast({ message: msg, type })
 
-  // Close notif drawer on outside click
   useEffect(() => {
     const handler = (e) => { if (notifRef.current && !notifRef.current.contains(e.target)) setShowNotifs(false) }
     document.addEventListener('mousedown', handler)
@@ -1091,7 +956,6 @@ function Dashboard() {
 
   const pollAll = async () => {
     try {
-      // Poll inquiries
       const { data: inquiries } = await api.get('/inquiries')
       const newInquiries = inquiries.filter(i => i.status === 'new')
       const storedInquiry = localStorage.getItem('gtmg_last_seen_inquiry')
@@ -1099,7 +963,6 @@ function Dashboard() {
         ? newInquiries.filter(i => new Date(i.createdAt) > new Date(storedInquiry))
         : newInquiries
 
-      // Poll invest leads
       const { data: leads } = await api.get('/invest-leads')
       const newLeads = leads.filter(l => l.status === 'new')
       const storedLead = localStorage.getItem('gtmg_last_seen_lead')
@@ -1109,12 +972,8 @@ function Dashboard() {
 
       setNotifications(prev => {
         const existingIds = new Set(prev.map(n => n._id))
-        const freshInquiries = unseenInquiries
-          .filter(i => !existingIds.has(i._id))
-          .map(i => ({ ...i, read: false, type: 'inquiry' }))
-        const freshLeads = unseenLeads
-          .filter(l => !existingIds.has(l._id))
-          .map(l => ({ ...l, read: false, type: 'invest' }))
+        const freshInquiries = unseenInquiries.filter(i => !existingIds.has(i._id)).map(i => ({ ...i, read: false, type: 'inquiry' }))
+        const freshLeads = unseenLeads.filter(l => !existingIds.has(l._id)).map(l => ({ ...l, read: false, type: 'invest' }))
         const combined = [...freshInquiries, ...freshLeads]
         if (combined.length === 0) return prev
         return [...combined, ...prev].slice(0, 20)
@@ -1193,12 +1052,11 @@ function Dashboard() {
   const stats = { total: properties.length, active: properties.filter(p => p.active).length, featured: properties.filter(p => p.featured).length, inactive: properties.filter(p => !p.active).length }
 
   const navItems = [
-    { key: 'properties',    label: 'Properties',        icon: <Home size={15} />,          badge: properties.length },
-    { key: 'inquiries',     label: 'Inquiries',          icon: <MessageSquare size={15} />, badge: unreadCount, badgeColor: unreadCount > 0 ? '#c9a96e' : null },
-    { key: 'calendar',      label: 'Booking Calendar',   icon: <Calendar size={15} /> },
-    { key: 'analytics',     label: 'Analytics',          icon: <BarChart2 size={15} /> },
-    { key: 'reviews',       label: 'Guest Reviews',      icon: <StarIcon size={15} />,      badge: 2, badgeColor: '#d97706' },
-    { key: 'invest-leads',  label: 'Investment Leads',   icon: <TrendingUp size={15} /> },
+    { key: 'properties',   label: 'Properties',       icon: <Home size={15} />,          badge: properties.length },
+    { key: 'inquiries',    label: 'Inquiries',         icon: <MessageSquare size={15} />, badge: unreadCount, badgeColor: unreadCount > 0 ? '#c9a96e' : null },
+    { key: 'calendar',     label: 'Booking Calendar',  icon: <Calendar size={15} /> },
+    { key: 'analytics',    label: 'Analytics',         icon: <BarChart2 size={15} /> },
+    { key: 'invest-leads', label: 'Investment Leads',  icon: <TrendingUp size={15} /> },
     ...(isOwner ? [{ key: 'team', label: 'Team Members', icon: <Users size={15} /> }] : []),
   ]
 
@@ -1217,7 +1075,6 @@ function Dashboard() {
         }
       `}</style>
 
-      {/* Sidebar */}
       <aside className="dash-sidebar">
         <div style={{ padding: '28px 20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '13px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.3)', paddingBottom: '3px', marginBottom: '3px' }}>GT Property Management</div>
@@ -1244,31 +1101,23 @@ function Dashboard() {
         </nav>
 
         <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)', position: 'relative' }} ref={notifRef}>
-
-          {/* Bell button */}
           <button onClick={() => { setShowNotifs(!showNotifs); if (!showNotifs) markAllRead() }}
             style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)', padding: '8px 14px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: "'Jost', sans-serif", borderRadius: '4px', width: '100%', transition: 'all 0.2s', marginBottom: '10px', position: 'relative', justifyContent: 'space-between' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#c9a96e'; e.currentTarget.style.color = '#c9a96e' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bell size={13} />
-              Notifications
-            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Bell size={13} />Notifications</div>
             {unreadCount > 0 && (
-              <span style={{ background: '#c9a96e', color: '#fff', borderRadius: '10px', padding: '1px 7px', fontSize: '10px', fontWeight: 700, animation: 'pulse 2s infinite' }}>
-                {unreadCount}
-              </span>
+              <span style={{ background: '#c9a96e', color: '#fff', borderRadius: '10px', padding: '1px 7px', fontSize: '10px', fontWeight: 700, animation: 'pulse 2s infinite' }}>{unreadCount}</span>
             )}
           </button>
 
-          {/* Notification Drawer */}
           {showNotifs && (
             <div style={{ position: 'absolute', bottom: '100%', left: '12px', right: '12px', background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', boxShadow: '0 -8px 32px rgba(0,0,0,0.4)', overflow: 'hidden', zIndex: 200, marginBottom: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <span style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c9a96e' }}>Notifications</span>
                 {notifications.length > 0 && (
-                  <button onClick={markAllRead} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'Jost', sans-serif', letterSpacing: '0.08em'", textTransform: 'uppercase' }}>Mark all read</button>
+                  <button onClick={markAllRead} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' }}>Mark all read</button>
                 )}
               </div>
               <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
@@ -1292,9 +1141,7 @@ function Dashboard() {
                           </span>
                         </div>
                         <div style={{ fontSize: '12px', color: '#fff', fontWeight: n.read ? 400 : 600, marginBottom: '2px' }}>
-                          {n.type === 'invest'
-                            ? `Investment lead from ${n.firstName} ${n.lastName || ''}`
-                            : `New inquiry from ${n.firstName} ${n.lastName || ''}`}
+                          {n.type === 'invest' ? `Investment lead from ${n.firstName} ${n.lastName || ''}` : `New inquiry from ${n.firstName} ${n.lastName || ''}`}
                         </div>
                         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {n.type === 'invest' ? `Wants to ${n.interest}` : n.property}
@@ -1324,10 +1171,7 @@ function Dashboard() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="dash-main">
-
-        {/* Mobile nav pills */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '4px' }}>
           {navItems.map(item => (
             <button key={item.key} onClick={() => setActiveSection(item.key)}
@@ -1337,7 +1181,6 @@ function Dashboard() {
           ))}
         </div>
 
-        {/* ── PROPERTIES ── */}
         {activeSection === 'properties' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
@@ -1356,7 +1199,6 @@ function Dashboard() {
 
             {error && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', padding: '12px 16px', borderRadius: '4px', fontSize: '13px', color: '#dc2626', marginBottom: '20px' }}>{error}</div>}
 
-            {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '32px' }}>
               {[{ l: 'Total Properties', v: stats.total, c: '#c9a96e' }, { l: 'Active', v: stats.active, c: '#16a34a' }, { l: 'Featured', v: stats.featured, c: '#d97706' }, { l: 'Inactive', v: stats.inactive, c: '#dc2626' }].map(s => (
                 <div key={s.l} style={{ background: '#fff', border: '1px solid #f0eeeb', padding: '24px 28px', borderRadius: '4px' }}>
@@ -1366,7 +1208,6 @@ function Dashboard() {
               ))}
             </div>
 
-            {/* Table */}
             <div style={{ background: '#fff', border: '1px solid #f0eeeb', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '68px 1fr 100px 120px 110px 60px 80px 110px', padding: '12px 20px', background: '#f8f7f5', borderBottom: '1px solid #f0eeeb' }}>
                 {['Image','Property','Type','Location','Price/Night','Active','Featured','Actions'].map(h => (
@@ -1426,15 +1267,13 @@ function Dashboard() {
           </div>
         )}
 
-        {activeSection === 'inquiries'     && <InquiriesSection showToast={showToast} properties={properties} />}
-        {activeSection === 'calendar'      && <BookingCalendarSection properties={properties} />}
-        {activeSection === 'analytics'     && <AnalyticsSection properties={properties} />}
-        {activeSection === 'reviews'       && <ReviewsSection showToast={showToast} />}
-        {activeSection === 'invest-leads'  && <InvestLeadsSection showToast={showToast} />}
-        {activeSection === 'team'          && isOwner && <TeamSection showToast={showToast} currentUserId={currentUserId} />}
+        {activeSection === 'inquiries'    && <InquiriesSection showToast={showToast} properties={properties} />}
+        {activeSection === 'calendar'     && <BookingCalendarSection properties={properties} />}
+        {activeSection === 'analytics'    && <AnalyticsSection properties={properties} />}
+        {activeSection === 'invest-leads' && <InvestLeadsSection showToast={showToast} />}
+        {activeSection === 'team'         && isOwner && <TeamSection showToast={showToast} currentUserId={currentUserId} />}
       </main>
 
-      {/* Delete Modal */}
       {deleteId && (() => {
         const prop = properties.find(p => p._id === deleteId)
         return (
