@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MapPin, Users, TrendingUp, ArrowRight, Phone } from 'lucide-react'
+import { MapPin, Users, TrendingUp, ArrowRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -138,7 +138,7 @@ export default function Invest() {
         </div>
 
         {/* Bottom fade */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to bottom, transparent, #f8f7f5)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '220px', background: 'linear-gradient(to bottom, transparent 0%, rgba(248,247,245,0.4) 40%, rgba(248,247,245,0.85) 70%, #f8f7f5 100%)' }} />
       </section>
 
       {/* ── HOW IT WORKS ── */}
@@ -184,7 +184,7 @@ export default function Invest() {
                       }}>
                         <Icon size={22} strokeWidth={1.5} />
                       </div>
-                      <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 7vw, 80px)', fontWeight: 300, color: 'rgba(201,169,110,0.2)', lineHeight: 1 }}>
+                      <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 7vw, 80px)', fontWeight: 300, color: 'rgba(201,169,110,0.6)', lineHeight: 1 }}>
                         {step.number}
                       </span>
                     </div>
@@ -265,15 +265,34 @@ export default function Invest() {
             </div>
           </AnimatedSection>
 
-          {/* Right — Form */}
+          {/* Right — HubSpot Meeting Embed */}
           <AnimatedSection delay={150}>
-            <InvestForm />
+            <HubSpotMeeting />
           </AnimatedSection>
         </div>
       </section>
 
       <Footer />
     </div>
+  )
+}
+
+function HubSpotMeeting() {
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js'
+    script.type = 'text/javascript'
+    script.async = true
+    document.body.appendChild(script)
+    return () => { document.body.removeChild(script) }
+  }, [])
+
+  return (
+    <div
+      className="meetings-iframe-container"
+      data-src="https://meetings.hubspot.com/tsotomayor/gt-property-management-group-meeting-link?embed=true"
+      style={{ minHeight: '650px', width: '100%' }}
+    />
   )
 }
 
