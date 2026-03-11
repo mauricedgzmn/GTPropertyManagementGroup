@@ -5,9 +5,9 @@ import { Menu, X } from 'lucide-react'
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Our Story', href: '/about' },
+  { label: 'Our Story', href: '/our-story' },
   { label: 'Properties', href: '/properties' },
-  { label: 'Work With Us', href: '/invest' },
+{ label: 'Work With Us', href: '/work-with-us' },
   { label: 'Why STR', href: '/why-str' },
 ]
 
@@ -140,7 +140,7 @@ function Navbar() {
             }}
           >Book Now</Link>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontSize: '11px', color: '#888' }}>✆ +1 (239) 322 4140</span>
+
             <span style={{ fontSize: '11px', color: '#888' }}>✉ info@gtpropertymanagement.com</span>
           </div>
         </div>
@@ -161,7 +161,6 @@ function Navbar() {
         gap: isMobile ? '4px' : '0'
       }}>
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', fontSize: isMobile ? '10px' : '11px', textAlign: 'center', gap: isMobile ? '4px' : '24px' }}>
-          <span>✆ &nbsp;+1 (239) 322 4140</span>
           <span>✉ &nbsp;info@gtpropertymanagement.com</span>
         </div>
         {!isMobile && <div style={{ color: '#e8d5b0' }}>Comfortable Stays. Hassle-Free Booking</div>}
