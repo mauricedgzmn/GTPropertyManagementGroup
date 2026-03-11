@@ -18,8 +18,8 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/invest" element={<Invest />} />
+        <Route path="/our-story" element={<AboutUs />} />
+        <Route path="/work-with-us" element={<Invest />} />
         <Route path="/why-str" element={<WhySTR />} />
         <Route path="/admin" element={<Login />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
